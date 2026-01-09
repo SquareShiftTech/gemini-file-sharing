@@ -53,6 +53,7 @@ const extensionConfig = {
         [name]: {
             command: "node",
             args: ["--no-warnings", "gcs-deploy-bundled.cjs"],
+            cwd: "${extensionPath}",
             env: {}
         }
     }
