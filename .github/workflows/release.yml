@@ -27,38 +27,17 @@ jobs:
           npm run build
           npm run bundle
 
-      - name: Prepare Release Artifact
+      - name: Create release assets
         run: |
-          mkdir release_artifact
-          cp dist/gcs-deploy-bundled.cjs release_artifact/
-          
-          # Create gemini-extension.json for the release
-          # We use jq to create a new config specifically for the packaged asset
-          # Command points to the sibling file in the zip
-          cat > release_artifact/gemini-extension.json <<EOF
-          {
-            "name": "gcs-deployer",
-            "version": "${GITHUB_REF#refs/tags/v}",
-            "description": "Deploys generated HTML files to GCS and makes them public.",
-            "mcpServers": {
-              "gcs-deployer": {
-                "command": "node",
-                "args": [
-                  "gcs-deploy-bundled.cjs"
-                ],
-                "env": {}
-              }
-            }
-          }
-          EOF
-
-      - name: Zip Artifact
-        run: |
-          cd release_artifact
-          zip -r ../gcs-deployer.zip ./*
+          npm run package -- --platform=darwin --arch=arm64
+          npm run package -- --platform=linux --arch=x64
+          npm run package -- --platform=win32 --arch=x64
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: gcs-deployer.zip
+          files: |
+            release/darwin.arm64.gcs-deployer.tar.gz
+            release/linux.x64.gcs-deployer.tar.gz
+            release/win32.x64.gcs-deployer.zip
           generate_release_notes: true

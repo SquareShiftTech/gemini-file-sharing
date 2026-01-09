@@ -12,7 +12,8 @@
   "main": "dist/gcs-deploy-bundled.cjs",
   "scripts": {
     "build": "tsc",
-    "bundle": "esbuild src/gcs-deploy.ts --bundle --platform=node --target=node18 --outfile=dist/gcs-deploy-bundled.cjs --format=cjs --external:mock-aws-s3 --external:nock --external:aws-sdk"
+    "bundle": "esbuild src/gcs-deploy.ts --bundle --platform=node --target=node18 --outfile=dist/gcs-deploy-bundled.cjs --format=cjs --external:mock-aws-s3 --external:nock --external:aws-sdk",
+    "package": "node scripts/package.js"
   },
   "devDependencies": {
     "@types/node": "^20.11.25",
