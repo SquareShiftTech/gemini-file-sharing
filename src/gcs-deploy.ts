@@ -354,23 +354,10 @@ export class GcsDeployServer {
   }
 }
 
-// Only auto-run if this is the main module
-// In CJS bundle, require.main === module is difficult to check because of bundling.
-// However, since this file is the entry point of the bundle, just running it should work.
-// But we want to avoid running it when importing for testing.
-// A common workaround in bundled CJS is checking if require.main.filename matches __filename, 
-// but esbuild might wrap things.
-// Given we output CJS, let's use a dual check or just assume if it's not imported by test.
-// Simpler: check if process.argv[1] ends with the filename.
-
-const isMainModule =
-  (typeof require !== 'undefined' && require.main === module) ||
-  (process.argv[1] && (
-    process.argv[1].endsWith('gcs-deploy-bundled.cjs') ||
-    process.argv[1].endsWith('gcs-deploy.ts')
-  ));
-
-if (isMainModule) {
+// Only auto-run if we are NOT in test mode
+// This ensures that for the user, it always runs.
+// Verification scripts should set MCP_TEST_MODE='true' before importing.
+if (process.env.MCP_TEST_MODE !== 'true') {
   const server = new GcsDeployServer();
   server.run().catch(console.error);
 }
