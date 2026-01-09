@@ -1,6 +1,10 @@
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+import fs from 'fs';
+import path from 'path';
+import { execSync } from 'child_process';
+import { createRequire } from 'module';
+import { fileURLToPath } from 'url';
+
+const require = createRequire(import.meta.url);
 const packageJson = require('../package.json');
 
 // Parse arguments
