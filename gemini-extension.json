@@ -1,0 +1,14 @@
+{
+  "name": "gcs-deployer",
+  "version": "0.1.0",
+  "description": "Deploys generated HTML files to GCS and makes them public.",
+  "mcpServers": {
+    "gcs-deployer": {
+      "command": "node",
+      "args": [
+        "dist/gcs-deploy-bundled.cjs"
+      ],
+      "env": {}
+    }
+  }
+}
