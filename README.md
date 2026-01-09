@@ -2,8 +2,10 @@
 
 Share files publicly with a simple command! This Gemini CLI extension uploads your files to Google Cloud Storage and gives you a shareable public link.
 
-<!-- VIDEO_PLACEHOLDER: Add demo video here -->
-![Demo Video Placeholder](https://via.placeholder.com/800x400?text=Demo+Video+Coming+Soon)
+
+<video src="https://github.com/user-attachments/assets/0e980c64-54e6-4495-a699-56358e2064db" controls autoplay loop muted playsinline width="100%">
+</video>
+
 
 ## ✨ What It Does
 
