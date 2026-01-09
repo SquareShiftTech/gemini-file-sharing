@@ -52,7 +52,7 @@ const extensionConfig = {
     mcpServers: {
         [name]: {
             command: "node",
-            args: ["gcs-deploy-bundled.cjs"],
+            args: ["--no-warnings", "gcs-deploy-bundled.cjs"],
             env: {}
         }
     }
