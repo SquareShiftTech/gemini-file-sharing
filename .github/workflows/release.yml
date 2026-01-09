@@ -1,0 +1,64 @@
+name: Release Extension
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build extension
+        run: |
+          npm run build
+          npm run bundle
+
+      - name: Prepare Release Artifact
+        run: |
+          mkdir release_artifact
+          cp dist/gcs-deploy-bundled.cjs release_artifact/
+          
+          # Create gemini-extension.json for the release
+          # We use jq to create a new config specifically for the packaged asset
+          # Command points to the sibling file in the zip
+          cat > release_artifact/gemini-extension.json <<EOF
+          {
+            "name": "gcs-deployer",
+            "version": "${GITHUB_REF#refs/tags/v}",
+            "description": "Deploys generated HTML files to GCS and makes them public.",
+            "mcpServers": {
+              "gcs-deployer": {
+                "command": "node",
+                "args": [
+                  "gcs-deploy-bundled.cjs"
+                ],
+                "env": {}
+              }
+            }
+          }
+          EOF
+
+      - name: Zip Artifact
+        run: |
+          cd release_artifact
+          zip -r ../gcs-deployer.zip ./*
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: gcs-deployer.zip
+          generate_release_notes: true
